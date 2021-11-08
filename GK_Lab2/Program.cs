@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using GK_Lab2.Triangles;
+using GK_Lab2.SphereTriangulation;
 
 namespace GK_Lab2
 {
