@@ -43,11 +43,11 @@ namespace GK_Lab2.SphereTriangulation
             }
 
             var zeroPoint = new Point(centerX, centerY);
-            points[quantity * quantity * 4] = new Vector3(zeroPoint.X, zeroPoint.Y, 0);
+            points[quantity * quantity * 4] = new Vector3(zeroPoint.X, zeroPoint.Y, radius);
 
             for (int around = 0; around < quantity * 4; around++)
             {
-                tri[tind++] = (around + (quantity - 1) * quantity * 4, (around + 1) % (quantity * 4) 
+                tri[tind++] = (around + (quantity - 1) * quantity * 4, (around + 1) % (quantity * 4)
                     + (quantity - 1) * quantity * 4, quantity * quantity * 4);
             }
 
