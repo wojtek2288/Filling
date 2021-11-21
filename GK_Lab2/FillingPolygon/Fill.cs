@@ -63,12 +63,7 @@ namespace GK_Lab2.FillingPolygon
 
                 for(int i = 0; i < 3; i++)
                 {
-                    color[i] = Options.ObjSurface == ObjectSurface.Solid ? Options.SolidCol
-                    : (Options.NormalMap.GetPixel((int)Polygon[i].X, (int)Polygon[i].Y));
-
-                    normalVec[i] = CalculateNormalVector(Polygon[i], Options.SphereCenter);
-
-                    textureVec[i] = PixelColoring.GetVectorFromTexture((int)Polygon[i].X, (int)Polygon[i].Y, Options.NormalMap);
+                    color[i] = PixelColoring.ColorPixel(Options, Polygon[i], CalculateNormalVector(Polygon[i], Options.SphereCenter));
                 }
             }
 
@@ -159,7 +154,7 @@ namespace GK_Lab2.FillingPolygon
                         else if(Options.ObjColor == ObjectColor.Interpolated)
                         {
                             dirBitmap.SetPixel((int)x, (int)y - 1,
-                                PixelColoring.ColorInterpolatedPixel(Options, PointPos, normalVec, textureVec, 
+                                PixelColoring.ColorInterpolatedPixel(Options, PointPos, 
                                 color.ToList(), Polygon.ToArray(), triangleDenominator));
                         }
                     }

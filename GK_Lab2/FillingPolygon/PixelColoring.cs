@@ -20,7 +20,7 @@ namespace GK_Lab2.FillingPolygon
             G,
             B,
         }
-        public static Color ColorPixel(ColoringOptions Options, Vector3 PointPos, Vector3 NormalVector, List<Vector3> triangle = null)
+        public static Color ColorPixel(ColoringOptions Options, Vector3 PointPos, Vector3 NormalVector)
         {
             Vector3[] matrix = new Vector3[3];
             Vector3 B = Vector3.Normalize(Vector3.Cross(NormalVector, new Vector3(0, 0, 1)));
@@ -67,8 +67,7 @@ namespace GK_Lab2.FillingPolygon
             return Color.FromArgb(Map_0_1_to_0_255(RVal), Map_0_1_to_0_255(GVal), Map_0_1_to_0_255(BVal));
         }
 
-        public static Color ColorInterpolatedPixel(ColoringOptions Options, Vector3 PointPos, Vector3[] NormalVec, 
-            Vector3[] TextureVec, List<Color> Colors, Vector3[] Triangle, float triangleDenominator)
+        public static Color ColorInterpolatedPixel(ColoringOptions Options, Vector3 PointPos, List<Color> Colors, Vector3[] Triangle, float triangleDenominator)
         {
             if(Options.ObjColor == ObjectColor.Interpolated)
             {
@@ -81,47 +80,11 @@ namespace GK_Lab2.FillingPolygon
                 float W2 = ((y3 - y1) * (x - x3) + (x1 - x3) * (y - y3)) / triangleDenominator;
                 float W3 = 1 - W1 - W2;
 
-                Vector3 InterpolatedVec = W1 * NormalVec[0] + W2 * NormalVec[1] + W3 * NormalVec[2];
-                Vector3 InterpolatedTextureVec = W1 * TextureVec[0] + W2 * TextureVec[1] + W3 * TextureVec[2];
-
-                Vector3[] matrix = new Vector3[3];
-                Vector3 B = Vector3.Normalize(Vector3.Cross(InterpolatedVec, new Vector3(0, 0, 1)));
-                Vector3 T = Vector3.Normalize(Vector3.Cross(B, InterpolatedVec));
-
-                if (InterpolatedVec.X == 0 && InterpolatedVec.Y == 0 && InterpolatedVec.Z == 1)
-                    B = Vector3.Normalize(new Vector3(0, 1, 0));
-
-                matrix[0] = T;
-                matrix[1] = B;
-                matrix[2] = InterpolatedVec;
-
-                Vector3 N = (float)Options.k * InterpolatedVec + (float)(1 - Options.k) * CalculateMultiplication(matrix, InterpolatedTextureVec);
-                N = Vector3.Normalize(N);
-
-                Vector3 L = Vector3.Normalize(new Vector3(Options.LightPos.X - PointPos.X, Options.LightPos.Y - PointPos.Y, Options.LightPos.Z - PointPos.Z));
-
-                Vector3 R = 2 * Vector3.Dot(N, L) * N - L;
-
                 double ColorR = Map_0_255_to_0_1((int)(W1 * Colors[0].R + W2 * Colors[1].R + W3 * Colors[2].R));
                 double ColorG = Map_0_255_to_0_1((int)(W1 * Colors[0].G + W2 * Colors[1].G + W3 * Colors[2].G));
                 double ColorB = Map_0_255_to_0_1((int)(W1 * Colors[0].B + W2 * Colors[1].B + W3 * Colors[2].B));
 
-                double RVal = Options.kd * Map_0_255_to_0_1(Options.LightColor.R) * ColorR 
-                    * CalcCos(N, L)
-                    + Options.ks * Map_0_255_to_0_1(Options.LightColor.R) * ColorR
-                    * Math.Pow(CalcCos(new Vector3(0, 0, 1), R), Options.m);
-
-                double GVal = Options.kd * Map_0_255_to_0_1(Options.LightColor.G) * ColorG
-                    * CalcCos(N, L)
-                    + Options.ks * Map_0_255_to_0_1(Options.LightColor.G) * ColorG
-                    * Math.Pow(CalcCos(new Vector3(0, 0, 1), R), Options.m);
-
-                double BVal = Options.kd * Map_0_255_to_0_1(Options.LightColor.B) * ColorB
-                    * CalcCos(N, L)
-                    + Options.ks * Map_0_255_to_0_1(Options.LightColor.B) * ColorB
-                    * Math.Pow(CalcCos(new Vector3(0, 0, 1), R), Options.m);
-
-                return Color.FromArgb(Map_0_1_to_0_255(RVal), Map_0_1_to_0_255(GVal), Map_0_1_to_0_255(BVal));
+                return Color.FromArgb(Map_0_1_to_0_255(ColorR), Map_0_1_to_0_255(ColorG), Map_0_1_to_0_255(ColorB));
             }
             return Color.White;
         }
