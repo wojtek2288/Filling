@@ -8,3 +8,6 @@ possibility of overlaying normal maps on the sphere.
 ## Tech
 - WinForms
 - C#
+
+## Demo
+https://github.com/wojtek2288/Filling/blob/master/Filling-gif.gif
